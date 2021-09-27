@@ -7,7 +7,16 @@ from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array
 
+# Flast requirements
+from flask import Flask, jsonify, request
+from flask_restful import Api, Resource
+from model.Train import train_model
 
+# Initialize Flask
+app = Flask(__name__)
+api = Api(app)
+
+@app.route('/api/', methods=['POST'])
 def detect_and_predict_mask(frame, face_net, mask_net):
     # grab the dimensions of the frame and then construct a blob
     # from it
@@ -68,7 +77,7 @@ def detect_and_predict_mask(frame, face_net, mask_net):
 
     # return a 2-tuple of the face locations and their corresponding
     # locations
-    return (locs, preds)
+    return jsonify(locs, preds)
 
 
 # load our serialized face detector model from disk
@@ -123,6 +132,9 @@ while True:
     if key == ord("q"):
         break
 
+
+app.run(debug=True, host='0.0.0.0')
 # do a bit of cleanup
 cv2.destroyAllWindows()
 vs.stop()
+
