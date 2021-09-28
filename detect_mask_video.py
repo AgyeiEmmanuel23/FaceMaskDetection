@@ -14,7 +14,7 @@ from model.Train import train_model
 
 # Initialize Flask
 app = Flask(__name__)
-api = Api(app)
+
 
 @app.route('/api/', methods=['POST'])
 def detect_and_predict_mask(frame, face_net, mask_net):
